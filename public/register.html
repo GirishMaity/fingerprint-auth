@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+  </head>
+  <body>
+    <form id="register_form">
+      <input type="text" placeholder="Enter your email" id="email" />
+      <input type="password" placeholder="Enter your password" id="password" />
+      <button type="submit">Register</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("register_form");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const res = await fetch("/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.value,
+            password: password.value,
+          }),
+        });
+
+        const parsedResponse = await res.json();
+        const { id } = parsedResponse;
+
+        window.location.replace(`${window.location.origin}/profile.html?uid=${id}`);
+      });
+    </script>
+  </body>
+</html>
