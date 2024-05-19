@@ -1,6 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const routes = require("./router/routes");
+const crypto = require("node:crypto");
+
+if (!globalThis.crypto) {
+  globalThis.crypto = crypto;
+}
 
 const app = express();
 dotenv.config();
