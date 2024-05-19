@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form id="login_form">
+      <input type="text" placeholder="Enter your email" id="email" />
+      <button type="submit">Login with passkey</button>
+    </form>
+
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+    <script>
+      const form = document.getElementById("login_form");
+      const email = document.getElementById("email");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.value,
+          }),
+        });
+
+        const parsedResponse = await res.json();
+        const { options } = parsedResponse;
+
+        const authResult = await SimpleWebAuthnBrowser.startAuthentication(options);
+
+        await fetch("/loginverify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.value,
+            cred: authResult,
+          }),
+        });
+      });
+    </script>
+  </body>
+</html>

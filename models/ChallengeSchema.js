@@ -11,6 +11,9 @@ const challengeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    registrationInfo: {
+      type: mongoose.Schema.Types.Mixed,
+    },
   },
   {
     timestamps: true,
